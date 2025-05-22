@@ -1,11 +1,28 @@
-﻿#root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.content-area {
+  height: 100vh;
+  overflow-y: auto;
 }
 
 th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.nav-link.active {
+  background-color: #0d6efd !important;
+  color: white !important;
 }
