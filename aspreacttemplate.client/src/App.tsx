@@ -3,10 +3,6 @@ import './App.css';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import TestPage from './pages/TestPage';
-import DashboardPage from './pages/DashboardPage';
-import OrdersPage from './pages/OrdersPage';
-import ProductsPage from './pages/ProductsPage';
-import CustomersPage from './pages/CustomersPage';
 
 function App() {
     const [currentPage, setCurrentPage] = useState<string>('home');

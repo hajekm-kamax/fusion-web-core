@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 interface SidebarProps {
@@ -37,7 +36,7 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                 {!collapsed && (
                     <span className="fs-5 fw-semibold text-white">
                         <i className="bi bi-bootstrap me-2"></i>
-                        Sidebar
+                        Template
                     </span>
                 )}
                 {collapsed && (
@@ -65,40 +64,7 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                         style={{ backgroundColor: activeLink === 'home' ? '#1EAEDB' : 'transparent' }}
                     >
                         <i className="bi bi-house-door me-3"></i>
-                        {!collapsed && <span>Home</span>}
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        href="#"
-                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'dashboard' ? 'active' : 'text-white'}`}
-                        onClick={(e) => { e.preventDefault(); onNavigate('dashboard'); }}
-                        style={{ backgroundColor: activeLink === 'dashboard' ? '#1EAEDB' : 'transparent' }}
-                    >
-                        <i className="bi bi-speedometer2 me-3"></i>
-                        {!collapsed && <span>Dashboard</span>}
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        href="#"
-                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'orders' ? 'active' : 'text-white'}`}
-                        onClick={(e) => { e.preventDefault(); onNavigate('orders'); }}
-                        style={{ backgroundColor: activeLink === 'orders' ? '#1EAEDB' : 'transparent' }}
-                    >
-                        <i className="bi bi-cart me-3"></i>
-                        {!collapsed && <span>Orders</span>}
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        href="#"
-                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'products' ? 'active' : 'text-white'}`}
-                        onClick={(e) => { e.preventDefault(); onNavigate('products'); }}
-                        style={{ backgroundColor: activeLink === 'products' ? '#1EAEDB' : 'transparent' }}
-                    >
-                        <i className="bi bi-grid me-3"></i>
-                        {!collapsed && <span>Products</span>}
+                        {!collapsed && <span>Domù</span>}
                     </a>
                 </li>
                 <li className="nav-item">
@@ -109,7 +75,7 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                         style={{ backgroundColor: activeLink === 'test' ? '#1EAEDB' : 'transparent' }}
                     >
                         <i className="bi bi-people me-3"></i>
-                        {!collapsed && <span>Customers</span>}
+                        {!collapsed && <span>Test stránka</span>}
                     </a>
                 </li>
             </ul>
