@@ -35,13 +35,15 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
             <div className="d-flex align-items-center justify-content-between p-3 mb-2 border-bottom border-secondary">
                 {!collapsed && (
                     <span className="fs-5 fw-semibold text-white">
-                        <i className="bi bi-bootstrap me-2"></i>
+                        <i className="bi bi-bootstrap me-3"></i>
                         Template
                     </span>
                 )}
                 {collapsed && (
                     <span className="fs-5 fw-semibold text-white mx-auto">
-                        <i className="bi bi-bootstrap"></i>
+                        <span className="fs-5 fw-semibold text-white mx-auto">
+                            <img src="./assets/getsitelogo.png" alt="Logo" style={{ width: 24, height: 24 }} />
+                        </span>
                     </span>
                 )}
                 {!collapsed && (
@@ -59,23 +61,23 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                 <li className="nav-item">
                     <a
                         href="#"
-                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'home' ? 'active' : 'text-white'}`}
+                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'home' ? 'active' : 'text-white'} ${collapsed ? 'justify-content-center' : '' }`}
                         onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
                         style={{ backgroundColor: activeLink === 'home' ? '#1EAEDB' : 'transparent' }}
                     >
-                        <i className="bi bi-house-door me-3"></i>
-                        {!collapsed && <span>Domù</span>}
+                        <i className="bi bi-house-door"></i>
+                        {!collapsed && <span className="ms-3">Domù</span>}
                     </a>
                 </li>
                 <li className="nav-item">
                     <a
                         href="#"
-                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'test' ? 'active' : 'text-white'}`}
+                        className={`nav-link d-flex align-items-center py-2 px-3 ${activeLink === 'test' ? 'active' : 'text-white'} ${collapsed ? 'justify-content-center' : '' }`}
                         onClick={(e) => { e.preventDefault(); onNavigate('test'); }}
                         style={{ backgroundColor: activeLink === 'test' ? '#1EAEDB' : 'transparent' }}
                     >
-                        <i className="bi bi-people me-3"></i>
-                        {!collapsed && <span>Test stránka</span>}
+                        <i className="bi bi-people"></i>
+                        {!collapsed && <span className="ms-3">Test stránka</span>}
                     </a>
                 </li>
             </ul>
