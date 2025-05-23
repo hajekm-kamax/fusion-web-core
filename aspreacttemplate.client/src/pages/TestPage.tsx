@@ -4,11 +4,11 @@ import React from 'react';
 const TestPage = () => {
   return (
     <div className="container p-4">
-          <h1>Test Page</h1>
-      +��������
+      <h1>Test Page</h1>
       <p className="lead">This is a test page to demonstrate routing in your application.</p>
       <div className="alert alert-secondary">
-        You can use this page as a template for creating additional pages.
+        <h4>Special Character Test</h4>
+        <p>These special characters should display correctly: ěščřžýáíé</p>
       </div>
 
       <div className="mt-4">
