@@ -48,7 +48,8 @@ namespace AspReactTemplate.Server.Controllers
         {
             if (Request.Cookies.TryGetValue("app_refresh", out var rt))
             {
-                var row = await _db.RefreshTokens.SingleOrDefaultAsync(t => t.TokenSha == TokenService.Hash(rt));
+                var sha = TokenService.Hash(rt);
+                var row = await _db.RefreshTokens.SingleOrDefaultAsync(t => t.TokenSha == sha);
                 if (row != null) row.Revoked = DateTime.UtcNow;
                 await _db.SaveChangesAsync();
             }

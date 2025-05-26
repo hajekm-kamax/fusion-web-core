@@ -14,8 +14,8 @@ api.interceptors.response.use(
         if (err.response?.status === 401 && !original._retry) {
             original._retry = true;
             if (!refreshPromise) {
-                refreshPromise = axios.post('/api/auth/refresh', null, { withCredentials: true })
-                    .finally(() => { refreshPromise = null; });
+                refreshPromise = axios.post("/api/auth/refresh", null,
+                    { withCredentials: true }).then(() => { });
             }
             await refreshPromise;
             return api(original);

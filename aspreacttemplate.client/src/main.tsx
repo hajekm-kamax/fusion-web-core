@@ -6,11 +6,15 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import './index.css'
 import App from './App.tsx'
 import { OidcProvider } from './auth/Oidc.tsx'
+import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
+        <BrowserRouter> 
         <OidcProvider>
             <App />
-        </OidcProvider>
+            </OidcProvider>
+        </BrowserRouter>
+
     </StrictMode>,
 )

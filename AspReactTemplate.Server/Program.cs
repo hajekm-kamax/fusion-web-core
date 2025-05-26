@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text.Json;
 using AspReactTemplate.Server.Data;
 using AspReactTemplate.Server.Models;
 using AspReactTemplate.Server.Services;
@@ -71,6 +72,14 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("spa-dev",
+        p => p.WithOrigins("https://localhost:51674")   // SPA origin
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
 // --- seed demo data each run ---
@@ -81,7 +90,6 @@ using (var scope = app.Services.CreateScope())
     db.UserRoles.Add(new UserRole { UserId = "alice", RoleId = 1 });
     db.SaveChanges();
 }
-
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -95,9 +103,49 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();           // REQUIRED so MapGet/MapControllers work
+
+app.UseCors("spa-dev");
+
+app.UseAuthentication();    // required before UseAuthorization
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/oidc/discovery", async ctx =>
+{
+    using var http = new HttpClient();
+    var src = await http.GetStringAsync(
+        "https://kxcztuin002/.well-known/openid-configuration");
+
+    var doc = JsonDocument.Parse(src);
+    var dict = doc.RootElement.EnumerateObject()
+                              .ToDictionary(p => p.Name, p => (object)p.Value.Clone());
+
+    dict["token_endpoint"] = "https://localhost:7174/oidc/token";
+
+    ctx.Response.ContentType = "application/json";
+    await ctx.Response.WriteAsync(JsonSerializer.Serialize(dict));
+}).RequireCors("spa-dev");
+
+app.MapPost("/oidc/token", async ctx =>
+{
+    var form = await ctx.Request.ReadFormAsync();
+    using var http = new HttpClient();
+
+    // Forward form-urlencoded body to the real IdP
+    var resp = await http.PostAsync(
+        "https://kxcztuin002:643/connect/token",
+        new FormUrlEncodedContent(form!));
+
+    ctx.Response.StatusCode = (int)resp.StatusCode;
+    ctx.Response.ContentType = "application/json";
+    ctx.Response.Headers.Append("Access-Control-Allow-Origin",
+                                "https://localhost:51674");
+
+    await resp.Content.CopyToAsync(ctx.Response.Body);
+}).RequireCors("spa-dev");
+
 
 app.MapFallbackToFile("/index.html");
 
