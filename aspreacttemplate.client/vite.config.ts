@@ -51,7 +51,8 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            '^/auth/*': {
+            '^/auth/signin-oidc': { target, secure: false, changeOrigin: true },
+            '^/auth/login': {
                 target,
                 secure: false
             }

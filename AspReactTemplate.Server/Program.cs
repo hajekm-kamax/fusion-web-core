@@ -5,17 +5,11 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --------------------------------------------------
-// Core services
-// --------------------------------------------------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();                       // used by AuthController
 
-// --------------------------------------------------
-// Authentication & authorisation
-// --------------------------------------------------
 var oidc = builder.Configuration.GetSection("Oidc");
 
 builder.Services
@@ -49,8 +43,6 @@ builder.Services.AddAuthentication(options =>
     o.ClientSecret = oidc["ClientSecret"];
     o.ResponseType = OpenIdConnectResponseType.Code;
     o.UsePkce = true;
-    o.CallbackPath = "/auth/callback-login";
-    o.SignedOutCallbackPath = "/auth/callback-logout";
 
     o.Scope.Clear();
     foreach (var s in oidc.GetSection("Scopes").Get<string[]>())
@@ -85,9 +77,6 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// --------------------------------------------------
-// Pipeline
-// --------------------------------------------------
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
