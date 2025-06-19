@@ -24,6 +24,7 @@ body {
 .theme-dark {
     --page-bg: #1A1F2C;
     --sidebar-bg: #000080;
+    --sidebar-divider-color: #495057;
     --sidebar-text: #ffffff;
     --sidebar-muted: #bbbbbb;
     --highlight-bg: #1EAEDB;
@@ -31,8 +32,9 @@ body {
 
 /* Light theme */
 .theme-light {
-    --page-bg: #F5F5F5;
-    --sidebar-bg: #2f80eb;
+    --page-bg: #FFFFFF;
+    --sidebar-bg: #2f67eb;
+    --sidebar-divider-color: #000000;
     --sidebar-text: #212529;
     --sidebar-muted: #6c757d;
     --highlight-bg: #0d6efd;

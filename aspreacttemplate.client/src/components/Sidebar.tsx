@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useTheme } from '../contexts/ThemeContext'; // Adjust path if needed
+import { useTheme } from '../contexts/ThemeContext';
+import { useSidebar } from '../contexts/SidebarContext';
 
 interface SidebarProps {
     activeLink: string;
@@ -7,14 +8,12 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
-    const [collapsed, setCollapsed] = useState(false);
+    const { collapsed, toggleSidebar } = useSidebar();
+    const { theme, toggleTheme } = useTheme();
     const [showLabel, setShowLabel] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userName] = useState('mdo');
 
-    const { theme, toggleTheme } = useTheme();
-
-    const toggleSidebar = () => setCollapsed(!collapsed);
     const handleLogin = () => setLoggedIn(true);
     const handleLogout = () => setLoggedIn(false);
 
@@ -38,23 +37,27 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                 height: '100vh',
                 position: 'relative'
             }}
-
         >
             {/* Top brand/logo */}
             <div
-                className="border-bottom border-secondary p-3 d-flex align-items-center justify-content-center"
-                style={{ height: '58px' }}
+                className="d-flex align-items-center border-bottom p-3"
+                style={{
+                    borderColor: 'var(--divider-color)',
+                    height: '58px'
+                }}
             >
-                <span className="fs-5 fw-semibold d-flex align-items-center text-white">
-                    <i className="bi bi-bootstrap"></i>
-                    {showLabel && <span className="ms-2 text-nowrap">Sidebar</span>}
-                </span>
+                <div className={`d-flex align-items-center ${collapsed ? 'mx-auto' : ''}`}>
+                    <i className="bi bi-bootstrap fs-4"></i>
+                    {showLabel && !collapsed && (
+                        <span className="ms-2 fs-5 fw-semibold text-nowrap">Sidebar</span>
+                    )}
+                </div>
             </div>
 
             {/* Navigation links */}
             <ul className="nav nav-pills flex-column flex-grow-1 px-2 gap-1 mt-3">
                 {[
-                    { key: 'home', icon: 'house-door', label: 'Homeá' },
+                    { key: 'home', icon: 'house-door', label: 'Home' },
                     { key: 'dashboard', icon: 'speedometer2', label: 'Dashboard' },
                     { key: 'orders', icon: 'cart', label: 'Orders' },
                     { key: 'products', icon: 'grid', label: 'Products' },
@@ -90,7 +93,7 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
             </ul>
 
             {/* User section */}
-            <div className="border-top border-secondary p-3">
+            <div className="border-top p-3" style={{ borderColor: 'var(--divider-color)', borderTopStyle: 'solid', borderTopWidth: '1px' }}>
                 {loggedIn ? (
                     <div className={`d-flex ${collapsed ? 'justify-content-center' : 'justify-content-between'} align-items-center`}>
                         {!collapsed && <span className="text-white-50">{userName}</span>}
@@ -117,7 +120,14 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
             </div>
 
             {/* Bottom: Theme toggle + Collapse button */}
-            <div className="border-top border-secondary p-3 d-flex justify-content-between align-items-center">
+            <div
+                className="border-top p-3 d-flex align-items-center justify-content-between"
+                style={{
+                    borderColor: 'var(--divider-color)',
+                    borderTopStyle: 'solid',
+                    borderTopWidth: '1px'
+                }}
+            >
                 {!collapsed && (
                     <button
                         className="btn btn-sm text-white d-flex align-items-center"
@@ -128,7 +138,6 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                         <span className="ms-2">{theme === 'dark' ? 'Light' : 'Dark'}</span>
                     </button>
                 )}
-
                 <button
                     className="btn btn-sm text-white"
                     onClick={toggleSidebar}

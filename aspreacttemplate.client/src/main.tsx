@@ -6,11 +6,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import './index.css'
 import App from './App.tsx'
 import { ThemeProvider } from './contexts/ThemeContext.tsx'
+import { SidebarProvider } from './contexts/SidebarContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ThemeProvider>
-            <App />
+            <SidebarProvider>
+                <App />
+            </SidebarProvider>
         </ThemeProvider>
     </StrictMode>,
 );
