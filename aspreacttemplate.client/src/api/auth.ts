@@ -10,12 +10,8 @@ export const login = () => {
     window.location.href = "/Authentication/login";
 };
 
-export const logout = async (): Promise<void> => {
-    await fetch("/Authentication/logout", {
-        method: "POST",
-        credentials: "include",
-    });
-    window.location.href = "/";
+export const logout = (): void => {
+    window.location.href = "/Authentication/logout";
 };
 
 export const getMe = async (): Promise<UserInfo> => {

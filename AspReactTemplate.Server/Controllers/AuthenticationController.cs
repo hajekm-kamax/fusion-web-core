@@ -58,16 +58,47 @@ namespace AspReactTemplate.Server.Controllers
             return Redirect("http://localhost:3000");
         }
 
-        [HttpPost("logout")]
+        [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
-            // Clear cookies (JWT + IdP session)
-            Response.Cookies.Delete("app_access");
+            var idToken = await HttpContext.GetTokenAsync("id_token");
 
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+            var authority = _configuration["Authentication:Authority"];
 
-            return Ok();
+            var postLogoutRedirectUri = Url.ActionLink(
+                action: "PostLogout",
+                controller: "Authentication"
+                );
+
+            var logoutUri = $"{authority}/connect/logout";
+
+            var parameters = new Dictionary<string, string>
+            {
+                ["post_logout_redirect_uri"] = postLogoutRedirectUri
+            };
+
+            if (!string.IsNullOrEmpty(idToken))
+            {
+                parameters["id_token_hint"] = idToken;
+            }
+
+            var query = string.Join("&", parameters.Select(p =>
+                $"{p.Key}={Uri.EscapeDataString(p.Value)}"));
+
+            return Redirect($"{logoutUri}?{query}");
+        }
+
+
+        [HttpGet("post-logout")]
+        public async Task<IActionResult> PostLogout([FromQuery] string? logoutConfirmed, [FromQuery] string? returnUrl = "/")
+        {
+            if (logoutConfirmed == "true")
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                Response.Cookies.Delete("app_access"); // if you're using access cookie
+            }
+
+            return Redirect(returnUrl ?? "/");
         }
 
         [HttpGet("me")]
