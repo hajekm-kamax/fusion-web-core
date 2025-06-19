@@ -75,7 +75,7 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                         <li className="nav-item" key={key}>
                             <a
                                 href="#"
-                                className={`nav-link d-flex align-items-center py-2 px-3`}
+                                className="nav-link d-flex align-items-center py-2 px-3"
                                 onClick={(e) => { e.preventDefault(); onNavigate(key); }}
                                 style={itemStyle}
                             >
@@ -92,12 +92,22 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
             </ul>
 
             {/* User section */}
-            <div className="border-top p-3" style={{ borderColor: 'var(--sidebar-divider-color)', borderTopStyle: 'solid', borderTopWidth: '1px' }}>
+            {/* User section */}
+            <div
+                className="border-top p-3"
+                style={{
+                    borderColor: 'var(--sidebar-divider-color)',
+                    borderTopStyle: 'solid',
+                    borderTopWidth: '1px'
+                }}
+            >
                 {loading ? (
                     <div style={{ color: 'var(--sidebar-muted)' }} className="text-center">Checking login...</div>
                 ) : user ? (
                     <div className={`d-flex ${collapsed ? 'justify-content-center' : 'justify-content-between'} align-items-center`}>
-                        {!collapsed && <span>{user.name}</span>}
+                        {!collapsed && showLabel && (
+                            <span style={{ color: 'var(--sidebar-text)' }}>{user.name}</span>
+                        )}
                         <button
                             className="btn btn-sm"
                             style={{ color: 'var(--sidebar-text)' }}
@@ -114,12 +124,13 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                             onClick={login}
                             aria-label="Login"
                         >
-                            <i className={`bi bi-box-arrow-in-right ${!collapsed && 'me-2'}`}></i>
-                            {!collapsed && <span>Login</span>}
+                            <i className={`bi bi-box-arrow-in-right ${!collapsed && showLabel ? 'me-2' : ''}`}></i>
+                            {!collapsed && showLabel && <span>Login</span>}
                         </button>
                     </div>
                 )}
             </div>
+
 
             {/* Bottom: Theme toggle + Collapse button */}
             <div
