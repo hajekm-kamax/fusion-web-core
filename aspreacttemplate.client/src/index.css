@@ -1,4 +1,3 @@
-
 :root {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     line-height: 1.5;
@@ -9,14 +8,37 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Default body styles */
 body {
     margin: 0;
     padding: 0;
     min-width: 320px;
     min-height: 100vh;
     overflow: hidden;
+    background-color: var(--page-bg);
+    color: var(--sidebar-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Dark theme (default) */
+.theme-dark {
+    --page-bg: #1A1F2C;
+    --sidebar-bg: #000080;
+    --sidebar-text: #ffffff;
+    --sidebar-muted: #bbbbbb;
+    --highlight-bg: #1EAEDB;
+}
+
+/* Light theme */
+.theme-light {
+    --page-bg: #F5F5F5;
+    --sidebar-bg: #2f80eb;
+    --sidebar-text: #212529;
+    --sidebar-muted: #6c757d;
+    --highlight-bg: #0d6efd;
+}
+
+/* Optional: fallback for prefers-color-scheme */
 @media (prefers-color-scheme: light) {
     :root {
         color: #213547;
