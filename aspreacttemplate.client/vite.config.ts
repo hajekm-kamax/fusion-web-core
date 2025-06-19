@@ -49,7 +49,18 @@ export default defineConfig({
         proxy: {
             '^/weatherforecast': {
                 target,
-                secure: false
+                secure: false,
+                changeOrigin: true
+            },
+            '^/Authentication': {
+                target,
+                secure: false,
+                changeOrigin: true
+            },
+            '^/api': {
+                target,
+                secure: false,
+                changeOrigin: true
             }
         },
         port: parseInt(env.DEV_SERVER_PORT || '51674'),

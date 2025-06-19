@@ -7,13 +7,16 @@ import './index.css'
 import App from './App.tsx'
 import { ThemeProvider } from './contexts/ThemeContext.tsx'
 import { SidebarProvider } from './contexts/SidebarContext.tsx'
+import { AuthProvider } from './contexts/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
+    // <StrictMode>
         <ThemeProvider>
             <SidebarProvider>
-                <App />
+                <AuthProvider>
+                    <App />
+                </AuthProvider>
             </SidebarProvider>
         </ThemeProvider>
-    </StrictMode>,
+   // </StrictMode>,
 );

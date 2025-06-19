@@ -8,7 +8,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Default body styles */
+/* Body defaults */
 body {
     margin: 0;
     padding: 0;
@@ -16,34 +16,28 @@ body {
     min-height: 100vh;
     overflow: hidden;
     background-color: var(--page-bg);
-    color: var(--sidebar-text);
+    color: var(--page-text);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark theme (default) */
+/* Dark Theme */
 .theme-dark {
     --page-bg: #1A1F2C;
+    --page-text: #ffffff;
     --sidebar-bg: #000080;
-    --sidebar-divider-color: #495057;
     --sidebar-text: #ffffff;
     --sidebar-muted: #bbbbbb;
+    --sidebar-divider-color: #495057;
     --highlight-bg: #1EAEDB;
 }
 
-/* Light theme */
+/* Light Theme */
 .theme-light {
-    --page-bg: #FFFFFF;
-    --sidebar-bg: #2f67eb;
+    --page-bg: #f5f6f8;
+    --page-text: #212529;
+    --sidebar-bg: #3f2feb;
+    --sidebar-text: #ffffff;
+    --sidebar-muted: #ded9d9;
     --sidebar-divider-color: #000000;
-    --sidebar-text: #212529;
-    --sidebar-muted: #6c757d;
     --highlight-bg: #0d6efd;
-}
-
-/* Optional: fallback for prefers-color-scheme */
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
 }
