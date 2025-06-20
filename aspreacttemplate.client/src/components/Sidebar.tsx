@@ -56,10 +56,7 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
             <ul className="nav nav-pills flex-column flex-grow-1 px-2 gap-1 mt-3">
                 {[
                     { key: 'home', icon: 'house-door', label: 'Home' },
-                    { key: 'dashboard', icon: 'speedometer2', label: 'Dashboard' },
-                    { key: 'orders', icon: 'cart', label: 'Orders' },
-                    { key: 'products', icon: 'grid', label: 'Products' },
-                    { key: 'test', icon: 'people', label: 'Customers' },
+                    { key: 'test', icon: 'grid', label: 'Test' },
                 ].map(({ key, icon, label }) => {
                     const isActive = activeLink === key;
 
@@ -91,7 +88,6 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                 })}
             </ul>
 
-            {/* User section */}
             {/* User section */}
             <div
                 className="border-top p-3"

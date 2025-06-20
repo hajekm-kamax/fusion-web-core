@@ -1,35 +1,37 @@
-import { useState } from 'react';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import TestPage from './pages/TestPage';
 
-function App() {
-    const [currentPage, setCurrentPage] = useState<string>('home');
+function Layout() {
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    const handleNavigate = (page: string) => {
-        setCurrentPage(page);
-    };
+    const currentPath = location.pathname.replace('/', '') || 'home';
 
-    // Render the appropriate page based on navigation state
-    const renderPage = () => {
-        switch (currentPage) {
-            case 'home':
-                return <HomePage />;
-            case 'test':
-                return <TestPage />;
-            default:
-                return <HomePage />;
-        }
+    const handleNavigate = (path: string) => {
+        navigate(`/${path}`);
     };
 
     return (
         <div className="d-flex">
-            <Sidebar activeLink={currentPage} onNavigate={handleNavigate} />
+            <Sidebar activeLink={currentPath} onNavigate={handleNavigate} />
             <div className="content-area flex-grow-1 overflow-auto">
-                {renderPage()}
+                <Routes>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/test" element={<TestPage />} />
+                    <Route path="*" element={<HomePage />} />
+                </Routes>
             </div>
         </div>
+    );
+}
+
+function App() {
+    return (
+        <Router>
+            <Layout />
+        </Router>
     );
 }
 
