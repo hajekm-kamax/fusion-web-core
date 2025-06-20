@@ -52,6 +52,11 @@ export default defineConfig({
                 secure: false,
                 changeOrigin: true
             },
+            '^/weatherforecast/admin': {
+                target,
+                secure: false,
+                changeOrigin: true
+            },
             '^/Authentication': {
                 target,
                 secure: false,

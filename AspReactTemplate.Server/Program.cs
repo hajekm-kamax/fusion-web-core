@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +18,34 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-.AddCookie()
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api") ||
+           context.Request.Path.StartsWithSegments("/weatherforecast"))
+        {
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        }
+
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
+
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api") ||
+           context.Request.Path.StartsWithSegments("/weatherforecast"))
+        {
+            context.Response.StatusCode = 403;
+            return Task.CompletedTask;
+        }
+
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
+})
 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
 {
     options.Authority = builder.Configuration["Authentication:Authority"];
@@ -39,7 +67,17 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         NameClaimType = "name",
-        RoleClaimType = "role"
+        RoleClaimType = ClaimTypes.Role
+    };
+
+    options.Events.OnTokenValidated = async context =>
+    {
+        var identity = (ClaimsIdentity)context.Principal.Identity!;
+
+        // Add your custom claims here
+        identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+
+        await Task.CompletedTask;
     };
 });
 

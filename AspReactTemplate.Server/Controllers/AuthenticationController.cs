@@ -1,11 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AspReactTemplate.Server.Controllers
 {
@@ -41,20 +38,24 @@ namespace AspReactTemplate.Server.Controllers
 
             var oidcUser = authenticateResult.Principal;
 
-            // You can also enrich the claims with data from your DB here.
-            var jwt = CreateJwtForUser(oidcUser);
-
-            // Store access token in secure cookie
-            Response.Cookies.Append("app_access", jwt, new CookieOptions
+            var claims = new List<Claim>(oidcUser.Claims)
             {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Path = "/",
-                Expires = DateTimeOffset.UtcNow.AddMinutes(30)
-            });
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim("role", "Admin")
+            };
 
-            // Optional: redirect back to your SPA
+            var enrichedIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            var principal = new ClaimsPrincipal(enrichedIdentity);
+
+            // This replaces the cookie identity with your enriched one
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            Console.WriteLine("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLL");
+
             return Redirect("http://localhost:3000");
         }
 
@@ -68,13 +69,13 @@ namespace AspReactTemplate.Server.Controllers
             var postLogoutRedirectUri = Url.ActionLink(
                 action: "PostLogout",
                 controller: "Authentication"
-                );
+            );
 
             var logoutUri = $"{authority}/connect/logout";
 
             var parameters = new Dictionary<string, string>
             {
-                ["post_logout_redirect_uri"] = postLogoutRedirectUri
+                ["post_logout_redirect_uri"] = postLogoutRedirectUri!
             };
 
             if (!string.IsNullOrEmpty(idToken))
@@ -88,14 +89,13 @@ namespace AspReactTemplate.Server.Controllers
             return Redirect($"{logoutUri}?{query}");
         }
 
-
         [HttpGet("post-logout")]
         public async Task<IActionResult> PostLogout([FromQuery] string? logoutConfirmed, [FromQuery] string? returnUrl = "/")
         {
             if (logoutConfirmed == "true")
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                Response.Cookies.Delete("app_access"); // if you're using access cookie
+                Response.Cookies.Delete("app_access");
             }
 
             return Redirect(returnUrl ?? "/");
@@ -113,28 +113,5 @@ namespace AspReactTemplate.Server.Controllers
                 Claims = User.Claims.Select(c => new { c.Type, c.Value })
             });
         }
-
-        private string CreateJwtForUser(ClaimsPrincipal user)
-        {
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.Name, user.Identity?.Name ?? "unknown"),
-            new Claim("role", "user") // replace or enrich with DB claims
-        };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
     }
 }

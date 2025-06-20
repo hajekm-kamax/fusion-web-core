@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSidebar } from '../contexts/SidebarContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -57,6 +57,8 @@ const Sidebar = ({ activeLink, onNavigate }: SidebarProps) => {
                 {[
                     { key: 'home', icon: 'house-door', label: 'Home' },
                     { key: 'test', icon: 'grid', label: 'Test' },
+                    { key: 'admin', icon: 'person', label: 'Adminův koutek' }, 
+                    { key: 'weatherforecastpage', icon: 'cloud', label: 'Weather forecast'}
                 ].map(({ key, icon, label }) => {
                     const isActive = activeLink === key;
 

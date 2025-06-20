@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import TestPage from './pages/TestPage';
+import AdminPage from './pages/AdminPage';
+import WeatherForecastPage from './pages/WeatherForecastPage';
 
 function Layout() {
     const location = useLocation();
@@ -20,6 +22,8 @@ function Layout() {
                 <Routes>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/test" element={<TestPage />} />
+                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/weatherforecastpage" element={<WeatherForecastPage/>} />
                     <Route path="*" element={<HomePage />} />
                 </Routes>
             </div>
